@@ -6,7 +6,7 @@
 - Shadowsocks (v2ray-plugin)
 - SOCKS5
 - VMess (TLS, WebSocket)
-- VLESS (Reality, WebSocket, TLS, flow)
+- VLESS (Reality, WebSocket, TLS, flow, ECH)
 - Trojan (TLS, WebSocket)
 - Hysteria2
 - TUIC
