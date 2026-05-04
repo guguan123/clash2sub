@@ -87,9 +87,6 @@ function convertClashProxiesToV2rayLinks(proxies) {
 					// 控流
 					if (p.flow) vlessParams.set('flow', p.flow);
 
-					// 传输层类型
-					vlessParams.set('type', p.network || 'tcp');
-
 					if (p.tls) {
 						// 加密类型 (reality, tls)
 						vlessParams.set('security', p["reality-opts"] ? 'reality' : 'tls');
@@ -119,8 +116,13 @@ function convertClashProxiesToV2rayLinks(proxies) {
 
 					// 传输层配置
 					if (p.network === 'ws' && p["ws-opts"]) {
+						vlessParams.set('net', 'ws');
 						if (p["ws-opts"]?.headers?.Host) vlessParams.set('host', p["ws-opts"].headers.Host);
 						if (p["ws-opts"]?.path) vlessParams.set('path', p["ws-opts"].path);
+					} else if (p.network === 'http') {
+						vlessParams.set('type', 'http');
+						if (p["http-opts"]?.headers?.Host) vlessParams.set('host', p["http-opts"].headers.Host);
+						if (p["http-opts"]?.path) vlessParams.set('path', p["http-opts"].path);
 					}
 
 					const vlessQuery = vlessParams.toString();
