@@ -62,16 +62,24 @@ function convertClashProxiesToV2rayLinks(proxies) {
 						id: p.uuid,
 						aid: p.alterId,
 						scy: p.cipher,
-						net: p.network || "tcp",
+						net: "tcp",
 						type: "none",
-						...(p["ws-opts"]?.["headers"]?.Host && { host: p["ws-opts"]["headers"].Host }),
-						...(p["ws-opts"]?.path && { path: p["ws-opts"].path }),
 						...(p.servername && { sni: p.servername }),
 						...(p.tls && { tls: "tls" }),
 						...(p["skip-cert-verify"] && { insecure: 1 }),
 						// 只有当 p.alpn 有值时，才添加 alpn 字段
 						...(p.alpn?.length && { alpn: p.alpn.join(",") })
 					};
+					// 传输层配置
+					if (p.network === 'ws') {
+						vmessObj.net = 'ws';
+						if (p["ws-opts"]?.headers?.Host) vmessObj.host = p["ws-opts"].headers.Host;
+						if (p["ws-opts"]?.path) vmessObj.path = p["ws-opts"].path;
+					} else if (p.network === 'http') {
+						vmessObj.type = 'http';
+						if (p["http-opts"]?.headers?.Host) vmessObj.host = p["http-opts"].headers.Host;
+						if (p["http-opts"]?.path) vmessObj.path = p["http-opts"].path;
+					}
 					link = `vmess://${Buffer.from(JSON.stringify(vmessObj)).toString('base64')}`;
 					break;
 				}
@@ -116,11 +124,12 @@ function convertClashProxiesToV2rayLinks(proxies) {
 
 					// 传输层配置
 					if (p.network === 'ws') {
-						vlessParams.set('net', 'ws');
+						vlessParams.set('type', 'ws');
 						if (p["ws-opts"]?.headers?.Host) vlessParams.set('host', p["ws-opts"].headers.Host);
 						if (p["ws-opts"]?.path) vlessParams.set('path', p["ws-opts"].path);
 					} else if (p.network === 'http') {
-						vlessParams.set('type', 'http');
+						vlessParams.set('type', 'tcp');
+						vlessParams.set('headerType', 'http');
 						if (p["http-opts"]?.headers?.Host) vlessParams.set('host', p["http-opts"].headers.Host);
 						if (p["http-opts"]?.path) vlessParams.set('path', p["http-opts"].path);
 					}
