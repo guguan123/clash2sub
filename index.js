@@ -115,7 +115,7 @@ function convertClashProxiesToV2rayLinks(proxies) {
 					}
 
 					// 传输层配置
-					if (p.network === 'ws' && p["ws-opts"]) {
+					if (p.network === 'ws') {
 						vlessParams.set('net', 'ws');
 						if (p["ws-opts"]?.headers?.Host) vlessParams.set('host', p["ws-opts"].headers.Host);
 						if (p["ws-opts"]?.path) vlessParams.set('path', p["ws-opts"].path);
