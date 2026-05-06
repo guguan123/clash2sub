@@ -34,7 +34,8 @@ function convertClashProxiesToV2rayLinks(proxies) {
 							if (p['plugin-opts'].path) parts.push(`path=${p['plugin-opts'].path}`);
 
 							if (p['plugin-opts'].tls === true) parts.push('tls');
-							if (p['plugin-opts'].mux === true || p['plugin-opts'].mux === 0) parts.push(`mux=${p['plugin-opts'].mux}`);
+							if (p['plugin-opts'].mux === false) parts.push(`mux=0`);
+							if (p['plugin-opts'].mux === true) parts.push(`mux=1`);
 
 							// 连接符分号 ;
 							const pluginValue = parts.join(';');
